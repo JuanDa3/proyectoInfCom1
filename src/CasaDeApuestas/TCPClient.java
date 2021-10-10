@@ -58,6 +58,9 @@ public class TCPClient {
 				System.out.println();
 				System.out.println("- Para abrir una cuenta de ahorros digite:CREAR_CUENTA,nombre apellido");
 				System.out.println("- Para depositar dinero en una cuenta digite: DEPOSITAR,cuenta,valor");
+				System.out.println("- Para Cancelar una cuenta de ahorros digite: CANCELAR_CUENTA,cuenta");
+				System.out.println("- Para retirar dinero de una cuenta digite: RETIRAR,cuenta,valor");
+				System.out.println("- Para consultar su saldo digite: CONSULTAR,cuenta");
 				System.out.println("- Para salir de la aplicación digite: SALIR");
 				
 				
