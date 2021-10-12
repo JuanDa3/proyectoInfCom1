@@ -245,7 +245,7 @@ public class TCPServer {
 					toNetwork.println("¡La cuenta con número"+" "+valor+" "+"a nombre de:"+" "+cuentaEncontrada.getNombreUsuario()+" "+"ha sido cancelada con éxito!");
 					cuentasEnHashmap--;
 				}else{
-					toNetwork.println("ERROR: La cuenta no ha podido eliminarse debido a que tiene Apuestas asociadas o el saldo no es 0");
+					toNetwork.println("ERROR: La cuenta no ha podido eliminarse debido a que el saldo no es 0.00");
 				}
 			}else{
 				toNetwork.println("ERROR: La cuenta ingresada no existe");
@@ -265,7 +265,7 @@ public class TCPServer {
 		if(esNumerico==true){
 			saldoADepositar = Double.parseDouble(message.split(",")[2]);	
 			Set<String> cuentas = hashMapCuentas.keySet(); 
-			Cuenta cuentaEncontrada = new Cuenta();  // Para usar el constructor sin apuestas		
+			Cuenta cuentaEncontrada = new Cuenta(); 	//cuenta sin atributos para usar en metodos	
 			// for-each para recorrer todas las cuentas			
 			for(String valores: cuentas) {
 				Cuenta nombres = hashMapCuentas.get(valores);				

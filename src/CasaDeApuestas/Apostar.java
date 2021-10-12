@@ -14,7 +14,7 @@ public class Apostar {
 		this.numeroCualApostar = numeroCualApostar;
 		this.cuenta = cuenta;
 	}
-
+	
 	public int getNumeroCuenta() {
 		return numeroCuenta;
 	}
@@ -39,13 +39,18 @@ public class Apostar {
 		this.numeroCualApostar = numeroCualApostar;
 	}
 
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
 
 	@Override
 	public String toString() {
 		return "Apostar [numeroCuenta=" + numeroCuenta + ", tipoApuesta=" + tipoApuesta + ", numeroCualApostar="
-				+ numeroCualApostar + "]";
+				+ numeroCualApostar + ", cuenta=" + cuenta + "]";
 	}
-
-
 
 }
