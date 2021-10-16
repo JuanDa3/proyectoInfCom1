@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ public class TCPServer {
 
 	private ServerSocket listener;
 	private Socket serverSideSocket;
+	private Casa casa = new Casa();
+	
+	private ArrayList<Apuesta>apuestas = new ArrayList<>();
 	
 	int contador = 1;
 	int contApuestas = 0;
@@ -142,6 +146,31 @@ public class TCPServer {
 					}
 				}
 				
+				// --------------------- APOSTAR --------------------------------
+				
+				else if(message.contains("APOSTAR")) {	
+					if(message.length()<=14){
+						toNetwork.println("ERROR: Datos insuficientes");
+					}else if(message.contains(",")){
+						Boolean esNumerico = isNumeric(message.split(",")[1]);
+						int numCuenta = Integer.parseInt(message.split(",")[1]);
+						String tipoApuesta = message.split(",")[2];
+						String numeroApostar = message.split(",")[3];
+						if(esNumerico==true){
+							apostar(numCuenta, tipoApuesta, numeroApostar);
+						}else{
+							toNetwork.println("ERROR: Datos incosistentes");
+						}
+					}
+				}
+				
+				// --------------------- CERRAR APLICACION --------------------------------
+				
+				else if(message.contains("CERRAR")) {	
+					if(apuestas.size() == 0) {
+						
+					}
+				}
 				
 				// --------------------- CONSULTAR SALDO -------------------------------------
 				
@@ -262,7 +291,7 @@ public class TCPServer {
 		int cuentaActual = 0;
 		Boolean esNumerico = isNumeric(message.split(",")[2]);
 
-		if(esNumerico==true){
+		if(esNumerico){
 			saldoADepositar = Double.parseDouble(message.split(",")[2]);	
 			Set<String> cuentas = hashMapCuentas.keySet(); 
 			Cuenta cuentaEncontrada = new Cuenta();  // Para usar el constructor sin apuestas		
@@ -374,6 +403,90 @@ public class TCPServer {
 
 	}
 	
+	
+	// ---------------------------------- MÉTODO DE APOSTAR ---------------------------------------
+	
+	private void apostar(int numCuenta, String tipoApuesta, String numeroApostar) {
+		//validar que el usuario este registrado
+		Cuenta cuenta = existeCuenta(numCuenta);
+		if(cuenta != null) {
+			if(tipoApuesta.equalsIgnoreCase("A")) {
+				if(numeroApostar.length() == 4) {
+					if(cuenta.getSaldo() >= 10000) {
+						cuenta.setSaldo(cuenta.getSaldo() - 10000);
+						Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
+						casa.setSaldo(casa.getSaldo() + 10000);
+						apuestas.add(apuesta);
+						toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+					}else {
+						toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+					}
+				}else {
+					toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
+				}
+				//el valor de cada apuesta es de 10.000
+			}else if(tipoApuesta.equalsIgnoreCase("B")) {
+				if(numeroApostar.length() == 3) {
+					if(cuenta.getSaldo() >= 10000) {
+						cuenta.setSaldo(cuenta.getSaldo() - 10000);
+						Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
+						casa.setSaldo(casa.getSaldo() + 10000);
+						apuestas.add(apuesta);
+						toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+					}else {
+						toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+					}
+				}else {
+					toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
+				}
+				//el valor de cada apuesta es de 10.000
+			}else if(tipoApuesta.equalsIgnoreCase("C")) {
+				if(numeroApostar.length() == 2) {
+					if(cuenta.getSaldo() >= 10000) {
+						cuenta.setSaldo(cuenta.getSaldo() - 10000);
+						Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
+						casa.setSaldo(casa.getSaldo() + 10000);
+						apuestas.add(apuesta);
+						toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+					}else {
+						toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+					}
+				}else {
+					toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
+				}
+				//el valor de cada apuesta es de 10.000
+			}else {
+				toNetwork.println("ERROR: El tipo de apuesta " + tipoApuesta +" No es correcto, las opciones son A,B,C");
+			}
+		}else {
+			toNetwork.println("ERROR: La cuenta ingresada no existe");
+		}
+	}
+	
+	// ---------------------------------- MÉTODO VERIFICAR SI EXISTE CUENTA --------------------------
+	public Cuenta existeCuenta(int numCuenta) {
+		// for-each para recorrer todas las cuentas	
+		Set<String> cuentas = hashMapCuentas.keySet();
+		for(String valor: cuentas) {
+			Cuenta cuenta = hashMapCuentas.get(valor);			
+				if(cuenta.getNumeroCuenta() == numCuenta) {
+					return cuenta;
+				}			
+			}
+		return null;
+	}
+	
+	// ---------------------------------- MÉTODO QUE CUENTA LA CANTIDAD DE CIFRAS DE UN NUMERO --------------------------
+	public static int contarCifras(String numApostar) {
+		int numero = Integer.parseInt(numApostar);
+		int cont = 0;
+		while(numero > 0) {
+			cont++;
+			numero /=10;
+		}
+		return cont;
+	}
+	
 	public boolean verificarLetras(String valor) {	
 		    for (int x = 0; x < valor.length(); x++) {
 		        char c = valor.charAt(x);
@@ -412,10 +525,8 @@ public class TCPServer {
 	// ---------------------------------- MÉTODO MAIN ---------------------------------------
 
 	public static void main(String[] args) {
-
 		TCPServer server = new TCPServer();
 		server.init();
-
 	}
 
 }

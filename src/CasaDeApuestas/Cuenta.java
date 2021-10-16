@@ -6,9 +6,9 @@ public class Cuenta {
 	String nombreUsuario;
 	double saldo;
 	int numeroApuestas;
-	Apostar apostar;
+	Apuesta apostar;
 
-	public Cuenta(int numeroCuenta, String nombreUsuario, double saldo, Apostar apostar, int numeroApuestas) {
+	public Cuenta(int numeroCuenta, String nombreUsuario, double saldo, Apuesta apostar, int numeroApuestas) {
 		this.numeroCuenta = numeroCuenta;
 		this.nombreUsuario = nombreUsuario;
 		this.saldo = saldo;
@@ -35,11 +35,11 @@ public class Cuenta {
 		this.numeroApuestas = numeroApuestas;
 	}
 
-	public Apostar getApostar() {
+	public Apuesta getApostar() {
 		return apostar;
 	}
 
-	public void setApostar(Apostar apostar) {
+	public void setApostar(Apuesta apostar) {
 		this.apostar = apostar;
 	}
 

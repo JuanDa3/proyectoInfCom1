@@ -60,8 +60,10 @@ public class TCPClient {
 				System.out.println("- Para depositar dinero en una cuenta digite: DEPOSITAR,cuenta,valor");
 				System.out.println("- Para Cancelar una cuenta de ahorros digite: CANCELAR_CUENTA,cuenta");
 				System.out.println("- Para retirar dinero de una cuenta digite: RETIRAR,cuenta,valor");
+				System.out.println("- Para apostar dinero digite: APOSTAR,cuenta,tipo de apuesta,numero a apostar");
 				System.out.println("- Para consultar su saldo digite: CONSULTAR,cuenta");
 				System.out.println("- Para salir de la aplicación digite: SALIR");
+				
 				
 				
 				String fromUser = SCANNER.nextLine();
@@ -108,8 +110,6 @@ public class TCPClient {
 		
 		
 	}
-
-
 
 	// ---------------------------------- MÉTODO MAIN ---------------------------------------
 

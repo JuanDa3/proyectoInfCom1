@@ -1,12 +1,12 @@
 package CasaDeApuestas;
 
-public class Apostar {
+public class Apuesta {
 	
 	int numeroCuenta;
-	char tipoApuesta;
-	int numeroCualApostar;
+	String tipoApuesta;
+	String numeroCualApostar;
 
-	public Apostar(int numeroCuenta, char tipoApuesta, int numeroCualApostar) {
+	public Apuesta(int numeroCuenta, String tipoApuesta, String numeroCualApostar) {
 		super();
 		this.numeroCuenta = numeroCuenta;
 		this.tipoApuesta = tipoApuesta;
@@ -21,19 +21,19 @@ public class Apostar {
 		this.numeroCuenta = numeroCuenta;
 	}
 	
-	public char getTipoApuesta() {
+	public String getTipoApuesta() {
 		return tipoApuesta;
 	}
 	
-	public void setTipoApuesta(char tipoApuesta) {
+	public void setTipoApuesta(String tipoApuesta) {
 		this.tipoApuesta = tipoApuesta;
 	}
 	
-	public int getNumeroCualApostar() {
+	public String getNumeroCualApostar() {
 		return numeroCualApostar;
 	}
 	
-	public void setNumeroCualApostar(int numeroCualApostar) {
+	public void setNumeroCualApostar(String numeroCualApostar) {
 		this.numeroCualApostar = numeroCualApostar;
 	}
 
