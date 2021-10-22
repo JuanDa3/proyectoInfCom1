@@ -18,6 +18,7 @@ public class TCPServer {
 	private ServerSocket listener;
 	private Socket serverSideSocket;
 	private Casa casa = new Casa();
+	private boolean apuestaAbierta = true;
 	
 	private ArrayList<Apuesta>apuestas = new ArrayList<>();
 	
@@ -26,6 +27,7 @@ public class TCPServer {
 	HashMap<String, Cuenta> hashMapCuentas = new HashMap<String, Cuenta>();
 	int cuentasEnHashmap = 0;
 	Boolean run = true;
+	Boolean run2 = true;
 
 	public TCPServer() {
 		System.out.println("Servidor corriendo en el puerto:" + " " + PORT);
@@ -166,9 +168,26 @@ public class TCPServer {
 				
 				// --------------------- CERRAR APLICACION --------------------------------
 				
-				else if(message.contains("CERRAR")) {	
+				else if(message.contains("CERRAR")) {
 					if(apuestas.size() == 0) {
-						
+						boolean run2 = true;
+						String message2 = "";
+						do {
+							toNetwork.println("Seguro que desesa cerrar las apuestas?");
+							message2 = fromNetwork.readLine();
+							if(message2.contains("SI")) {
+								toNetwork.println("Casa de apuestas cerrada");
+								apuestaAbierta = false;
+								run2 = false;
+							}else if(message2.contains("NO")){
+								toNetwork.println("Sigue apostando");
+								run2 = false;
+							}
+						}while(run2);
+						//toNetwork.println("");
+					}else {
+						toNetwork.println("Casa de apuestas cerrada");
+						apuestaAbierta = false;
 					}
 				}
 				
@@ -408,59 +427,64 @@ public class TCPServer {
 	
 	private void apostar(int numCuenta, String tipoApuesta, String numeroApostar) {
 		//validar que el usuario este registrado
-		Cuenta cuenta = existeCuenta(numCuenta);
-		if(cuenta != null) {
-			if(tipoApuesta.equalsIgnoreCase("A")) {
-				if(numeroApostar.length() == 4) {
-					if(cuenta.getSaldo() >= 10000) {
-						cuenta.setSaldo(cuenta.getSaldo() - 10000);
-						Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
-						casa.setSaldo(casa.getSaldo() + 10000);
-						apuestas.add(apuesta);
-						toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+		if(apuestaAbierta) {
+			Cuenta cuenta = existeCuenta(numCuenta);
+			if(cuenta != null) {
+				if(tipoApuesta.equalsIgnoreCase("A")) {
+					if(numeroApostar.length() == 4) {
+						if(cuenta.getSaldo() >= 10000) {
+							cuenta.setSaldo(cuenta.getSaldo() - 10000);
+							Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
+							casa.setSaldo(casa.getSaldo() + 10000);
+							apuestas.add(apuesta);
+							toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+						}else {
+							toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+						}
 					}else {
-						toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+						toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
 					}
-				}else {
-					toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
-				}
-				//el valor de cada apuesta es de 10.000
-			}else if(tipoApuesta.equalsIgnoreCase("B")) {
-				if(numeroApostar.length() == 3) {
-					if(cuenta.getSaldo() >= 10000) {
-						cuenta.setSaldo(cuenta.getSaldo() - 10000);
-						Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
-						casa.setSaldo(casa.getSaldo() + 10000);
-						apuestas.add(apuesta);
-						toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+					//el valor de cada apuesta es de 10.000
+				}else if(tipoApuesta.equalsIgnoreCase("B")) {
+					if(numeroApostar.length() == 3) {
+						if(cuenta.getSaldo() >= 10000) {
+							cuenta.setSaldo(cuenta.getSaldo() - 10000);
+							Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
+							casa.setSaldo(casa.getSaldo() + 10000);
+							apuestas.add(apuesta);
+							toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+						}else {
+							toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+						}
 					}else {
-						toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+						toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
 					}
-				}else {
-					toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
-				}
-				//el valor de cada apuesta es de 10.000
-			}else if(tipoApuesta.equalsIgnoreCase("C")) {
-				if(numeroApostar.length() == 2) {
-					if(cuenta.getSaldo() >= 10000) {
-						cuenta.setSaldo(cuenta.getSaldo() - 10000);
-						Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
-						casa.setSaldo(casa.getSaldo() + 10000);
-						apuestas.add(apuesta);
-						toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+					//el valor de cada apuesta es de 10.000
+				}else if(tipoApuesta.equalsIgnoreCase("C")) {
+					if(numeroApostar.length() == 2) {
+						if(cuenta.getSaldo() >= 10000) {
+							cuenta.setSaldo(cuenta.getSaldo() - 10000);
+							Apuesta apuesta = new Apuesta(numCuenta, tipoApuesta, numeroApostar);
+							casa.setSaldo(casa.getSaldo() + 10000);
+							apuestas.add(apuesta);
+							toNetwork.println("¡Apuesta registrada con Exito, Buena Suerte!");
+						}else {
+							toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+						}
 					}else {
-						toNetwork.println("ERROR: el saldo minimo es de 10.000 y su saldo es: " + cuenta.getSaldo());
+						toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
 					}
+					//el valor de cada apuesta es de 10.000
 				}else {
-					toNetwork.println("ERROR: El tipo de apuesta A debe de recibir 4 cifras");
+					toNetwork.println("ERROR: El tipo de apuesta " + tipoApuesta +" No es correcto, las opciones son A,B,C");
 				}
-				//el valor de cada apuesta es de 10.000
 			}else {
-				toNetwork.println("ERROR: El tipo de apuesta " + tipoApuesta +" No es correcto, las opciones son A,B,C");
+				toNetwork.println("ERROR: La cuenta ingresada no existe");
 			}
 		}else {
-			toNetwork.println("ERROR: La cuenta ingresada no existe");
+			toNetwork.println("ERROR: La casa está cerrada");
 		}
+		
 	}
 	
 	// ---------------------------------- MÉTODO VERIFICAR SI EXISTE CUENTA --------------------------
@@ -505,6 +529,11 @@ public class TCPServer {
 		} catch (NumberFormatException nfe){
 			return false;
 		}
+	}
+	
+	// ---------------------------------- MÉTODO DEL MENU ---------------------------------------
+	private static String menu() {
+		return "";
 	}
 	
 	// ---------------------------------- MÉTODO PARA CREAR STREAMS ---------------------------------------
