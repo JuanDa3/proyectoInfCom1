@@ -16,6 +16,7 @@ public class TCPClient {
 	public static final String SERVER = "localhost";
 	private Socket clientSideSocket;
 	static Boolean run = true;
+	public static Boolean bandera = true;
 	
 	public TCPClient() {
 		System.out.println("El cliente se ha conectado ...");
@@ -44,27 +45,28 @@ public class TCPClient {
 
 	public static void protocol(Socket socket) {
 
-		
-		
 		try {
 		
 			while(run) {
 				toNetwork = new PrintWriter(socket.getOutputStream(), true);
 				fromNetwork = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-				System.out.println();
-				System.out.println("Ingrese una opción: " + " ");
-				System.out.println();
-				System.out.println("- Para abrir una cuenta de ahorros digite:CREAR_CUENTA,nombre apellido");
-				System.out.println("- Para depositar dinero en una cuenta digite: DEPOSITAR,cuenta,valor");
-				System.out.println("- Para Cancelar una cuenta de ahorros digite: CANCELAR_CUENTA,cuenta");
-				System.out.println("- Para retirar dinero de una cuenta digite: RETIRAR,cuenta,valor");
-				System.out.println("- Para apostar dinero digite: APOSTAR,cuenta,tipo de apuesta,numero a apostar");
-				System.out.println("- Para consultar su saldo digite: CONSULTAR,cuenta");
-				System.out.println("- Para salir de la aplicación digite: SALIR");
-				
-				
-				
+				if(bandera) {
+					System.out.println();
+					System.out.println("Ingrese una opción: " + " ");
+					System.out.println();
+					System.out.println("- Para abrir una cuenta de ahorros digite:CREAR_CUENTA,nombre apellido");
+					System.out.println("- Para depositar dinero en una cuenta digite: DEPOSITAR,cuenta,valor");
+					System.out.println("- Para Cancelar una cuenta de ahorros digite: CANCELAR_CUENTA,cuenta");
+					System.out.println("- Para retirar dinero de una cuenta digite: RETIRAR,cuenta,valor");
+					System.out.println("- Para apostar dinero digite: APOSTAR,cuenta,tipo de apuesta,numero a apostar");
+					System.out.println("- Para consultar su saldo digite: CONSULTAR,cuenta");
+					System.out.println("- Para salir de la aplicación digite: SALIR");
+					System.out.println("- Para cerrar la aplicacion de apuestas digite: CERRAR" + "\n");
+				}else {
+					System.out.println("[From Server:] " + fromNetwork.readLine());
+					bandera = true;
+				}
 				String fromUser = SCANNER.nextLine();
 				toNetwork.println(fromUser);
 				if(fromUser.equals("SALIR"))
@@ -96,6 +98,8 @@ public class TCPClient {
 						bfr.close();
 						fr.close();				
 					
+				}else if(fromUser.contains("CERRAR")) {
+					bandera = false;
 				}else{
 					String fromServer = fromNetwork.readLine();
 					System.out.println();
@@ -105,9 +109,15 @@ public class TCPClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
+	}
+
+	
+	public static Boolean getBandera() {
+		return bandera;
+	}
+
+	public static void setBandera(Boolean bandera) {
+		TCPClient.bandera = bandera;
 	}
 
 	// ---------------------------------- MÉTODO MAIN ---------------------------------------
