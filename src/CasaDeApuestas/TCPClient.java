@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TCPClient {
@@ -51,6 +52,8 @@ public class TCPClient {
 				toNetwork = new PrintWriter(socket.getOutputStream(), true);
 				fromNetwork = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+				String fromUser;
+		
 				if(bandera) {
 					System.out.println();
 					System.out.println("Ingrese una opción: " + " ");
@@ -62,46 +65,33 @@ public class TCPClient {
 					System.out.println("- Para apostar dinero digite: APOSTAR,cuenta,tipo de apuesta,numero a apostar");
 					System.out.println("- Para consultar su saldo digite: CONSULTAR,cuenta");
 					System.out.println("- Para salir de la aplicación digite: SALIR");
-					System.out.println("- Para cerrar la aplicacion de apuestas digite: CERRAR" + "\n");
+					System.out.println("- Para cerrar la aplicacion de apuestas digite: CERRAR");
+					System.out.println("- Para cargar la aplicacion desde archivo de texto digite: CARGAR" + "\n");
 				}else {
-					System.out.println("[From Server:] " + fromNetwork.readLine());
+					//System.out.println("[From Server:] " + fromNetwork.readLine());
 					bandera = true;
 				}
-				String fromUser = SCANNER.nextLine();
-				toNetwork.println(fromUser);
+				fromUser = SCANNER.nextLine();
 				if(fromUser.equals("SALIR"))
 				{
 					run = false;
 					System.out.println("Ha salido de la aplicacion");
-				}else if(fromUser.contains("CARGAR")){
-					
-						String valor;
-						
-						valor = fromUser.split(",")[1];
-						
-						String ruta = "src//archivos//"+valor+".txt";
-						
-						FileReader fr=new FileReader(ruta);
-						BufferedReader bfr=new BufferedReader(fr);
-						String linea="";
-						while((linea = bfr.readLine())!=null){
-							try {
-								toNetwork.println(linea);
-								Thread.sleep(1000);
-								fromNetwork.readLine();
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}													
-						}
-						System.out.println();
-						System.out.println("[Client] From server:" + " " +"¡Carga completa con éxito!");
-						bfr.close();
-						fr.close();				
-					
 				}else if(fromUser.contains("CERRAR")) {
 					bandera = false;
+					toNetwork.println(fromUser);
+					System.out.println("[Client] From server:" + fromNetwork.readLine());
+				}else if(fromUser.contains("CARGAR")) {
+					String ruta = "src/resources/transacciones.txt";
+					ArrayList<String> contenido = leerArchivo(ruta);
+					for(int i = 0; i < contenido.size(); i++) {
+						toNetwork.println(contenido.get(i));
+						System.out.println("[Client] From server:" + fromNetwork.readLine());
+					}
+					
 				}else{
+					toNetwork.println(fromUser);
 					String fromServer = fromNetwork.readLine();
+					System.out.println("entra");
 					System.out.println();
 					System.out.println("[Client] From server:" + " " + fromServer);
 				}
@@ -111,6 +101,19 @@ public class TCPClient {
 		}
 	}
 
+	
+	private static ArrayList<String>leerArchivo(String ruta) throws IOException{
+		ArrayList<String> contenido = new ArrayList<String>();
+		FileReader fr = new FileReader(ruta);
+		BufferedReader bfr = new BufferedReader(fr);
+		String linea = "";
+		while((linea = bfr.readLine()) != null) {
+			contenido.add(linea);
+		}
+		bfr.close();
+		fr.close();
+		return contenido;
+	}
 	
 	public static Boolean getBandera() {
 		return bandera;

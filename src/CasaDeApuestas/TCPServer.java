@@ -79,13 +79,6 @@ public class TCPServer {
 				run = false;
 			}
 			else{
-				
-				 if(message.contains("CARGAR")){
-					Casa casa = new Casa(0, 0);
-					toNetwork.println("Carga completa");
-					
-				}
-				
 				// --------------------- CREAR CUENTA ----------------------------------
 				
 				if(message.contains("CREAR_CUENTA")) {	
@@ -176,8 +169,9 @@ public class TCPServer {
 							toNetwork.println("Seguro que desesa cerrar las apuestas?");
 							message2 = fromNetwork.readLine();
 							if(message2.contains("SI")) {
-								toNetwork.println("Casa de apuestas cerrada");
 								apuestaAbierta = false;
+								System.out.println(message2);
+								toNetwork.println("Casa de apuestas cerrada");
 								run2 = false;
 							}else if(message2.contains("NO")){
 								toNetwork.println("Sigue apostando");
@@ -234,7 +228,7 @@ public class TCPServer {
 			datosUsuario =	hashMapCuentas.get(numCadena);		
 			contador++;		
 			toNetwork.println("¡Cuenta creada con éxito!"+" "+datosUsuario.toString());
-			System.out.println("[Server] From client se ha solicitado la creación de una cuenta"+" "+"|"+" "+datosUsuario.toString());		
+			//System.out.println("[Server] From client se ha solicitado la creación de una cuenta"+" "+"|"+" "+datosUsuario.toString());		
 		}else 
 		// En caso de que ya hayan cuentas creadas, debemos verificar que no hayan nombres repetidos y el procedimiento será diferente
 		{		
@@ -261,7 +255,7 @@ public class TCPServer {
 				datosUsuario =	hashMapCuentas.get(numCadena);				
 				contador++;				
 				toNetwork.println("¡Cuenta creada con éxito!"+" "+datosUsuario.toString());
-				System.out.println("[Server] From client se ha solicitado la creación de una cuenta"+" "+"|"+" "+datosUsuario.toString());				
+				//System.out.println("[Server] From client se ha solicitado la creación de una cuenta"+" "+"|"+" "+datosUsuario.toString());				
 			}			
 		}		
 	}	
@@ -330,8 +324,8 @@ public class TCPServer {
 				if(existeCuenta==true){
 					nuevoSaldo = cuentaEncontrada.getSaldo()+saldoADepositar;
 					cuentaEncontrada.setSaldo(nuevoSaldo);
-					System.out.println("[Server] From client se ha solicitado un deposito de:"+" "+saldoADepositar+"$"+" "+"en la cuenta:"+" "+cuentaEncontrada.getNumeroCuenta()+" | "+"saldo anterior:"+" "+saldoAnterior+
-							" "+"nuevo saldo:"+" "+nuevoSaldo+" "+"$");
+//					System.out.println("[Server] From client se ha solicitado un deposito de:"+" "+saldoADepositar+"$"+" "+"en la cuenta:"+" "+cuentaEncontrada.getNumeroCuenta()+" | "+"saldo anterior:"+" "+saldoAnterior+
+//							" "+"nuevo saldo:"+" "+nuevoSaldo+" "+"$");
 					toNetwork.println("¡Deposito exitoso, se han depositado"+" "+saldoADepositar+"$"+" "+"en la cuenta:"+" "+cuentaEncontrada.getNumeroCuenta()+" "+"saldo anterior:"+" "+saldoAnterior+" "+"nuevo saldo:"+" "+nuevoSaldo+" "+"$");
 				}else{
 					toNetwork.println("ERROR: La cuenta ingresada no existe");
