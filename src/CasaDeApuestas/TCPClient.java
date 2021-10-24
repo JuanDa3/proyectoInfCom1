@@ -68,7 +68,6 @@ public class TCPClient {
 					System.out.println("- Para cerrar la aplicacion de apuestas digite: CERRAR");
 					System.out.println("- Para cargar la aplicacion desde archivo de texto digite: CARGAR" + "\n");
 				}else {
-					//System.out.println("[From Server:] " + fromNetwork.readLine());
 					bandera = true;
 				}
 				fromUser = SCANNER.nextLine();
@@ -91,7 +90,6 @@ public class TCPClient {
 				}else{
 					toNetwork.println(fromUser);
 					String fromServer = fromNetwork.readLine();
-					System.out.println("entra");
 					System.out.println();
 					System.out.println("[Client] From server:" + " " + fromServer);
 				}
